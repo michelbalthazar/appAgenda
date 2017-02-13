@@ -1,0 +1,20 @@
+<ion-view title="Agenda" id="page1" style="background-color:#E3E7FA;">
+  <ion-content padding="true" class="has-header">
+    <form id="agenda-form1" class="list">
+      <label class="item item-input" id="agenda-search1">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="search" placeholder="Pesquisar">
+      </label>
+      <div class="spacer" style="width: 300px; height: 21px;"></div>
+      <ion-toggle toggle-class="toggle-positive" ng-checked="true" id="agenda-toggle2">Favoritos</ion-toggle>
+      <div class="spacer" style="width: 300px; height: 20px;"></div>
+      <ion-item class="item-thumbnail-left item-icon-right positive" id="agenda-list-item1">
+        <h2positive>Nome do Contato
+          <i class="icon ion-android-favorite"></i>
+        </h2positive>
+      </ion-item>
+    </form>
+    <a ui-sref="novoContato" id="agenda-button1" style="font-weight:500;border-radius:50px 50px 50px 50px;" class="button button-positive  button-block">Novo Contato</a>
+    <button id="agenda-button4" style="font-weight:500;border-radius:50px 50px 50px 50px;" class="button button-assertive  button-block">Sair</button>
+  </ion-content>
+</ion-view>
