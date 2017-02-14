@@ -32,5 +32,12 @@ ionic build android
 Podemos também debugar o aplicativo direto no dispositivo. Plugue o dispositivo via cabo USB, certifique de ter habilitado o USB debugging, e execute
 ionic run android
 
+PS: Para executar no desktop, execute o comando --> ionic serve   (com ionic devidamente instalado) 
+
+Não foi implementado:
+Listagem ordem alfabética.
+Update.
+Cadastro com foto. 
+
 
 
