@@ -16,12 +16,6 @@ angular.module('app.routes', [])
     controller: 'agendaCtrl'
   })
 
-  .state('novoContato', {
-    url: '/cadastrar',
-    templateUrl: 'templates/novoContato.html',
-    controller: 'novoContatoCtrl'
-  })
-
 $urlRouterProvider.otherwise('/agenda')
 
   

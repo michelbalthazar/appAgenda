@@ -1,28 +1,88 @@
 angular.module('app.controllers', [])
   
-.controller('agendaCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
-	var contatosLocal = [
-	{nome: 'Paulo', telefone: '2133-3124', favorito: false},
-	{nome: 'Rogério', telefone: '9999-9999', favorito: false},
-	{nome: 'Maria', telefone: '8888-88888', favorito: false},
-	{nome: 'Marcia', telefone: '7777-7777', favorito: false},
-	{nome: 'Paulo', telefone: '2133-3124', favorito: false},
-	{nome: 'Rogério', telefone: '9999-9999', favorito: false},
-	{nome: 'Maria', telefone: '8888-88888', favorito: true},
-	{nome: 'Marcia', telefone: '7777-7777', favorito: true},
-	];
+.controller('agendaCtrl', function($scope, $ionicModal, agendaApi, $ionicLoading) {
 	
-	$scope.contatos = contatosLocal;
-}])
+	var contatos = [];
+	$scope.permitirExcluir = false;
+	$scope.permitirEdicao = false;
+
+	
+	function obterObterContatos(){
+		contatos = agendaApi.getContatos();
+		$scope.contatos = contatos;
+
+		return contatos;
+	}
+
+	$scope.salvarContato = function(contato){
+		agendaApi.addContato(contato);
+
+		obterObterContatos();
+
+		$scope.closeModal();
+	}
+
+	$scope.excluirContato = function (contato) {
+		agendaApi.deleteContato(contato);
+
+		obterObterContatos();
+	}
+
+	$scope.filtrarContatosFavoritos = function(){
+		contatos = obterObterContatos();
+
+		if ($scope.favorito == true){
+			contatos = contatos.filter(function(contatos){
+				return contatos.favorito == true;
+			});
+
+			$scope.contatos = contatos;
+		}
+	}
+	
+	
+	
+	obterObterContatos();
+
+	$scope.habilitarExclusao = function () {
+		$scope.permitirExcluir = !$scope.permitirExcluir 
+	}
+
+	$scope.abrirTelaContato = function(){
+		$scope.contato = {nome: '', email: '', telefone: '', favorito : false};
+		$scope.openModal();
+	}
+
+	$scope.cancelarContato = function () {
+		$scope.closeModal();
+	}
+
+	
+
+	///modal inicio
+	$ionicModal.fromTemplateUrl('contato.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	}).then(function(modal) {
+		$scope.modal = modal;
+	});
+  
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  	///modal fim
+
+
+})
    
-.controller('novoContatoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('sobreCtrl', function($scope, $ionicNavBarDelegate) {
 
+	//Remover o botao voltar
+	$ionicNavBarDelegate.showBackButton(false);
 
-}])
+})
  

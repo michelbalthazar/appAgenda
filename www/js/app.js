@@ -5,17 +5,10 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services',])
-
-.config(function($ionicConfigProvider, $sceDelegateProvider){
-  
-
-  $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
-
-})
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives'])
 
 .run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
+  $ionicPlatform.ready(function($ionicPlatform, $state, $ionicHistory, $ionicPopup) {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -26,59 +19,27 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+
+    //Intercepta botao voltar do device
+    //Impedir do usuário voltar de tela e exibir popup se ele quer fechar o aplicativo
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        if ($state.current.name == "agenda" || $state.current.name == "sobre") { // your check here
+            $ionicPopup.confirm({
+                title: 'Aviso!',
+                template: 'Tem certeza que deseja sair do aplicativo?'
+            }).then(function (res) {
+                if (res) {
+                    //Remove o token de acesso a api ao entrar na tela de login
+                    ionic.Platform.exitApp();
+                }
+            })
+        }
+        else {
+            $ionicHistory.goBack();
+        }
+    }, 100);
+
+
   });
 })
-
-/*
-  This directive is used to disable the "drag to open" functionality of the Side-Menu
-  when you are dragging a Slider component.
-*/
-.directive('disableSideMenuDrag', ['$ionicSideMenuDelegate', '$rootScope', function($ionicSideMenuDelegate, $rootScope) {
-    return {
-        restrict: "A",  
-        controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
-
-            function stopDrag(){
-              $ionicSideMenuDelegate.canDragContent(false);
-            }
-
-            function allowDrag(){
-              $ionicSideMenuDelegate.canDragContent(true);
-            }
-
-            $rootScope.$on('$ionicSlides.slideChangeEnd', allowDrag);
-            $element.on('touchstart', stopDrag);
-            $element.on('touchend', allowDrag);
-            $element.on('mousedown', stopDrag);
-            $element.on('mouseup', allowDrag);
-
-        }]
-    };
-}])
-
-/*
-  This directive is used to open regular and dynamic href links inside of inappbrowser.
-*/
-.directive('hrefInappbrowser', function() {
-  return {
-    restrict: 'A',
-    replace: false,
-    transclude: false,
-    link: function(scope, element, attrs) {
-      var href = attrs['hrefInappbrowser'];
-
-      attrs.$observe('hrefInappbrowser', function(val){
-        href = val;
-      });
-      
-      element.bind('click', function (event) {
-
-        window.open(href, '_system', 'location=yes');
-
-        event.preventDefault();
-        event.stopPropagation();
-
-      });
-    }
-  };
-});
